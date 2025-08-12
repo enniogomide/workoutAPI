@@ -72,11 +72,13 @@ project/
 The API is organized into three main groups of routes, each with its respective prefix and tag:
 
 ### 🧍 Atletas (`/atletas`)
-- `POST /` – CCreate a new athlete
+- `POST /` – Create a new athlete
 - `GET /` – List all athletes
+- `GET /nomes` – List all athletes: only names, category and trainning centers
 - `GET /{id}` – Search for athlete by ID
 - `PATCH /{id}` – Partially update an athlete
 - `DELETE /{id}` – Delete athlete
+
 
 ### 🏷️ Categorias (`/categorias`)
 - `POST /` – Create a new category
@@ -102,6 +104,15 @@ The API is organized into three main groups of routes, each with its respective 
 ### `GET /atletas`
 - **Descrição**: Lista todos os atletas cadastrados.
 - **Saída**: Lista de objetos `AtletaOut`.
+- **filtros**: nome, cpf.
+- **paginação**: valores inicias: do 0, até 100.
+- **Status**: `200 OK`
+
+### `GET /atletas/nomes`
+- **Descrição**: Lista todos os atletas cadastrados: somente nome, categoria e centro de treinamento.
+- **Saída**: Lista de objetos `AtletaAll`.
+- **filtros**: nome, cpf.
+- **paginação**: valores inicias: do 0, até 100.
 - **Status**: `200 OK`
 
 ### `GET /atletas/{id}`
