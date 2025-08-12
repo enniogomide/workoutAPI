@@ -127,13 +127,20 @@ async def query_nomes(
     db_session: DatabaseDependency,
     offset: int = 0,
     limit: int = 100,
+    nome: Optional[str] = Query(None, Description='Nome do atleta para filtro'),
+    cpf: Optional[str] = Query(None, Description='CPF do atleta para filtro'),
 ) -> list[AtletaAll]:
     atletas: list[AtletaAll] = (
         (await db_session.execute(
             select(AtletaModel).offset(offset).limit(limit)
             )).scalars().all()
     )
-    lista_atletas = [AtletaAll.model_validate(atleta) for atleta in atletas]
+    if nome:
+        lista_atletas = [atleta for atleta in atletas if nome.lower() in atleta.nome.lower()]
+    elif cpf:
+        lista_atletas = [atleta for atleta in atletas if cpf == atleta.cpf]
+    else:
+        lista_atletas = [AtletaOut.model_validate(atleta) for atleta in atletas]
     return lista_atletas
 
 
