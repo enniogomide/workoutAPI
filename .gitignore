@@ -1,0 +1,15 @@
+.venv
+treinamento.db
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+/src
+/database
+/tests
+.env
+pgadmin.txt
+docker-compose.yml
+docker-compose_old.yml
+/docs
+/site
