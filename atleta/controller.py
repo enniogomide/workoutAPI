@@ -1,7 +1,8 @@
 from datetime import datetime
 from uuid import uuid4
 
-from fastapi import APIRouter, Body, HTTPException, status
+from fastapi import APIRouter, Body, HTTPException, status, Query
+from typing import Optional, Annotated
 from pydantic import UUID4
 from sqlalchemy.future import select
 
@@ -97,13 +98,22 @@ async def query_all(
     db_session: DatabaseDependency,
     offset: int = 0,
     limit: int = 100,
+    nome: Optional[str] = Query(None, Description='Nome do atleta para filtro'),
+    cpf: Optional[str] = Query(None, Description='CPF do atleta para filtro'),
+
 ) -> list[AtletaOut]:
     atletas: list[AtletaOut] = (
         (await db_session.execute(
             select(AtletaModel).offset(offset).limit(limit)
             )).scalars().all()
     )
-    lista_atletas = [AtletaOut.model_validate(atleta) for atleta in atletas]
+    if nome:
+        lista_atletas = [atleta for atleta in atletas if nome.lower() in atleta.nome.lower()]
+    elif cpf:
+        lista_atletas = [atleta for atleta in atletas if cpf == atleta.cpf]
+    else:
+        lista_atletas = [AtletaOut.model_validate(atleta) for atleta in atletas]
+
     return lista_atletas
 
 
